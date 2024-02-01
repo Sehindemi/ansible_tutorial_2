@@ -13,11 +13,11 @@
 
 
 - hosts: web_servers
-  tags: apache, apache2,ubuntu
   become: true
   tasks:
 
   - name: install apache, cache and  php for ubuntu servers 
+    tags: apache, apache2, ubuntu
     apt:
       name: 
         - apache2
@@ -34,6 +34,15 @@
         - php 
       state: latest
     when: ansible_distribution == "CentOS"
+
+  - name: copy default html for site 
+    tags: apache, apache2, httpd
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644 
 
 - hosts: db_servers
   become: true
